@@ -1,0 +1,51 @@
+1. Установите Prometheus:
+
+$ wget https://github.com/prometheus/prometheus/releases/download/v2.28.1/prometheus-2.28.1.linux-amd64.tar.gz
+$ tar xvfz prometheus-2.28.1.linux-amd64.tar.gz
+$ cd prometheus-2.28.1.linux-amd64/
+$ ./prometheus --config.file=prometheus.yml
+
+2. Создайте конфигурационный файл Prometheus, в котором вы определяете цели для мониторинга:
+
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'outgoing_traffic'
+    static_configs:
+      - targets: ['localhost:9100']
+  - job_name: 'node_exporter_metrics'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9100']
+3. Установите и запустите Node Exporter, который будет собирать метрики для Prometheus:
+
+$ wget https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz
+$ tar xvfz node_exporter-1.2.2.linux-amd64.tar.gz
+$ cd node_exporter-1.2.2.linux-amd64/
+$ ./node_exporter
+
+4. Установите Grafana:
+
+$ wget https://dl.grafana.com/oss/release/grafana-8.2.2.linux-amd64.tar.gz
+$ tar -zxvf grafana-8.2.2.linux-amd64.tar.gz
+$ cd grafana-8.2.2/
+$ ./bin/grafana-server
+
+
+5. Настройте источник данных Prometheus в Grafana:
+
+- Откройте интерфейс Grafana в браузере по адресу http://localhost:3000
+- Войдите в систему, используя учетные данные по умолчанию (admin/admin)
+- Нажмите на "Configuration" в левом меню и выберите "Data Sources"
+- Нажмите на "Add data source" и выберите "Prometheus"
+- Введите URL для вашего экземпляра Prometheus (по умолчанию http://localhost:9090) и нажмите "Save & Test"
+
+6. Создайте панель мониторинга в Grafana:
+
+- Нажмите на "Create" в левом меню и выберите "Dashboard"
+- Нажмите на "Add panel" и выберите тип графика, который вы хотите отобразить
+- Выберите источник данных Prometheus, который вы настроили ранее
+- Настройте запрос метрик, которые вы хотите отобразить на графике
+- Настройте другие параметры графика по вашему усмотрению
